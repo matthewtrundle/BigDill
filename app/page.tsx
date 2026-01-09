@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { Crown, Star, Truck, Gift, Award } from 'lucide-react'
+import Image from 'next/image'
+import { Crown, Star, Truck, Gift, Award, Medal, Play } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { PickleballSVG, BouncingPickleball } from '@/components/ui/PickleballSVG'
 import { CourtDivider, WaveDivider } from '@/components/ui/CourtDivider'
@@ -39,56 +40,79 @@ export default function HomePage() {
 
         {/* Main content */}
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="text-center">
-            {/* Animated Crown with surrounding pickleballs */}
-            <div className="mb-8 relative inline-block">
-              <div className="animate-bounce-subtle">
-                <Crown className="w-24 h-24 md:w-32 md:h-32 mx-auto text-gold-500 drop-shadow-lg" />
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text content */}
+            <div className="text-center lg:text-left">
+              {/* Headline */}
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal-900 mb-6">
+                Crown Your
+                <span className="block text-gold-600 drop-shadow-sm">Pickleball Champion</span>
+              </h1>
+
+              {/* Subheadline */}
+              <p className="text-lg md:text-xl text-charcoal-600 max-w-xl mb-8">
+                Custom 3D-printed pickleball crowns & medals - the ultimate wearable trophies for tournaments,
+                leagues, and the king or queen of your court.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button variant="primary" size="lg" asChild className="shadow-organic">
+                  <Link href="/shop">
+                    <Crown className="w-5 h-5 mr-2" />
+                    Shop Crowns
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <Link href="/shop#medals">
+                    <Medal className="w-5 h-5 mr-2" />
+                    Shop Medals
+                  </Link>
+                </Button>
               </div>
-              {/* Orbiting pickleballs */}
-              <div className="absolute -top-4 -left-8 animate-spin-slow">
-                <PickleballSVG size="sm" color="green" />
-              </div>
-              <div className="absolute -top-2 -right-10 animate-spin-slow" style={{ animationDirection: 'reverse' }}>
-                <PickleballSVG size="sm" color="pink" />
+
+              {/* Price Badge - organic styling */}
+              <div className="mt-8 inline-flex items-center gap-3 bg-white/90 backdrop-blur-sm px-5 py-3 rounded-organic shadow-organic">
+                <PickleballSVG size="sm" color="gold" />
+                <div className="text-left">
+                  <span className="text-charcoal-600 text-sm">Starting at</span>
+                  <span className="block font-bold text-gold-600 text-xl">$19.99</span>
+                </div>
+                <span className="text-pickle-600 text-sm font-medium bg-pickle-100 px-2 py-1 rounded-full">
+                  Free shipping over $35
+                </span>
               </div>
             </div>
 
-            {/* Headline */}
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-charcoal-900 mb-6">
-              Crown Your
-              <span className="block text-gold-600 drop-shadow-sm">Pickleball Champion</span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-lg md:text-xl text-charcoal-600 max-w-2xl mx-auto mb-8">
-              Custom 3D-printed pickleball crowns - the ultimate wearable trophy for tournaments,
-              leagues, and the king or queen of your court.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild className="shadow-organic">
-                <Link href="/shop">
-                  <Crown className="w-5 h-5 mr-2" />
-                  Customize Your Crown
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/about">Learn More</Link>
-              </Button>
-            </div>
-
-            {/* Price Badge - organic styling */}
-            <div className="mt-8 inline-flex items-center gap-3 bg-white/90 backdrop-blur-sm px-5 py-3 rounded-organic shadow-organic">
-              <PickleballSVG size="sm" color="gold" />
-              <div className="text-left">
-                <span className="text-charcoal-600 text-sm">Starting at</span>
-                <span className="block font-bold text-gold-600 text-xl">$19.99</span>
+            {/* Right: Video showcase */}
+            <div className="relative">
+              <div className="relative rounded-organic-lg overflow-hidden shadow-organic-lg aspect-square max-w-md mx-auto">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                >
+                  <source src="/images/crown-video.mp4" type="video/mp4" />
+                </video>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/30 to-transparent pointer-events-none" />
+                {/* Play badge */}
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full">
+                  <div className="w-6 h-6 bg-gold-500 rounded-full flex items-center justify-center">
+                    <Play className="w-3 h-3 text-white fill-white ml-0.5" />
+                  </div>
+                  <span className="text-charcoal-900 text-sm font-medium">See it in action</span>
+                </div>
               </div>
-              <span className="text-pickle-600 text-sm font-medium bg-pickle-100 px-2 py-1 rounded-full">
-                Free shipping over $35
-              </span>
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4">
+                <BouncingPickleball size="md" color="green" />
+              </div>
+              <div className="absolute -bottom-4 -left-4">
+                <BouncingPickleball size="md" color="pink" />
+              </div>
             </div>
           </div>
         </div>
@@ -140,6 +164,132 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured Products Section */}
+      <section className="bg-cream-100 py-16 md:py-24 relative overflow-hidden">
+        <CourtTexture variant="grid" color="#FFCC33" opacity={0.02} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
+              Our Products
+            </h2>
+            <p className="text-charcoal-600 max-w-2xl mx-auto">
+              From wearable crowns to custom medals - celebrate every victory in style.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {/* Crown Product Card */}
+            <div className="card-organic overflow-hidden group">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/images/il_1588xN.6727699661_5zg6.webp"
+                  alt="Pickleball Crown - King and Queen"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="inline-block bg-gold-500 text-charcoal-900 px-3 py-1 rounded-full text-sm font-bold mb-2">
+                    Best Seller
+                  </span>
+                  <h3 className="font-display text-2xl font-bold text-white">
+                    Pickleball Crowns
+                  </h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-charcoal-600 mb-4">
+                  Wearable 3D-printed crowns with customizable text. Perfect for tournaments,
+                  leagues, or crowning your court's champion. Available in King & Queen styles.
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-gold-600">$19.99</span>
+                  <Button variant="primary" asChild>
+                    <Link href="/shop">
+                      <Crown className="w-4 h-4 mr-2" />
+                      Customize
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Medal Product Card */}
+            <div className="card-organic overflow-hidden group" id="medals">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/images/medal1.jpg"
+                  alt="Pickleball Medals - Gold, Silver, Bronze"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="inline-block bg-pickle-500 text-white px-3 py-1 rounded-full text-sm font-bold mb-2">
+                    New
+                  </span>
+                  <h3 className="font-display text-2xl font-bold text-white">
+                    Tournament Medals
+                  </h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-charcoal-600 mb-4">
+                  Custom laser-engraved wood medals in gold, silver & bronze. Perfect for
+                  tournaments, leagues, and special events. Personalize with your logo & text.
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold text-gold-600">$9.99</span>
+                  <Button variant="primary" asChild>
+                    <Link href="/shop#medals">
+                      <Medal className="w-4 h-4 mr-2" />
+                      Customize
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Product Images Row */}
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="relative aspect-square rounded-organic overflow-hidden shadow-organic group">
+              <Image
+                src="/images/il_1588xN.6679666150_a6ho.webp"
+                alt="Pickleball King Crown"
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="relative aspect-square rounded-organic overflow-hidden shadow-organic group">
+              <Image
+                src="/images/tropy1.webp"
+                alt="Pickleball Trophy Crown"
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="relative aspect-square rounded-organic overflow-hidden shadow-organic group">
+              <Image
+                src="/images/Medal2.jpg"
+                alt="Pickleball Medal Detail"
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="relative aspect-square rounded-organic overflow-hidden shadow-organic group">
+              <Image
+                src="/images/il_1588xN.6686537704_76kj.webp"
+                alt="Pickleball Crown Collection"
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="bg-cream-200 py-16 md:py-24 relative overflow-hidden">
         {/* Top court divider */}
@@ -153,7 +303,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
-              Why Our Crowns?
+              Why Big Dill?
             </h2>
             <p className="text-charcoal-600 max-w-2xl mx-auto">
               The perfect way to celebrate wins, honor champions, or add excitement to any pickleball event.
@@ -248,24 +398,20 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-gold-50 to-gold-100 rounded-organic-lg p-8 text-center relative overflow-hidden">
+            <div className="relative rounded-organic-lg overflow-hidden shadow-organic-lg">
+              <Image
+                src="/images/il_1588xN.6679666150_a6ho.webp"
+                alt="Pickleball Crown Close-up"
+                width={600}
+                height={600}
+                className="w-full h-auto"
+              />
               {/* Decorative balls */}
               <div className="absolute top-4 right-4">
                 <BouncingPickleball size="sm" color="green" />
               </div>
               <div className="absolute bottom-4 left-4">
                 <BouncingPickleball size="sm" color="pink" />
-              </div>
-
-              <Crown className="w-32 h-32 mx-auto text-gold-500 mb-4 drop-shadow-lg" />
-              <p className="text-charcoal-600">
-                Each crown features 8 points topped with colorful 3D-printed pickleballs
-              </p>
-
-              {/* Ball display */}
-              <div className="flex justify-center gap-4 mt-6">
-                <PickleballSVG size="lg" color="green" animated />
-                <PickleballSVG size="lg" color="pink" animated />
               </div>
             </div>
           </div>
@@ -300,14 +446,21 @@ export default function HomePage() {
             Ready to Crown Your Champion?
           </h2>
           <p className="text-charcoal-800 mb-8 text-lg">
-            Design your custom pickleball crown today and make every victory unforgettable.
+            Design your custom pickleball crown or medal today and make every victory unforgettable.
           </p>
-          <Button variant="secondary" size="lg" asChild className="shadow-lg">
-            <Link href="/shop">
-              <Crown className="w-5 h-5 mr-2" />
-              Start Customizing
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button variant="secondary" size="lg" asChild className="shadow-lg">
+              <Link href="/shop">
+                <Crown className="w-5 h-5 mr-2" />
+                Shop Crowns
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild className="bg-white/90 hover:bg-white">
+              <Link href="/bulk-orders">
+                Bulk Orders
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </>
