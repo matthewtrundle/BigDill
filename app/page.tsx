@@ -1,23 +1,63 @@
+'use client'
+
 import Link from 'next/link'
 import { Crown, Star, Truck, Gift, Award } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { PickleballSVG, BouncingPickleball } from '@/components/ui/PickleballSVG'
+import { CourtDivider, WaveDivider } from '@/components/ui/CourtDivider'
+import { CourtTexture } from '@/components/ui/CourtTexture'
+import { BallParticles, FloatingBalls } from '@/components/ui/BallParticles'
+import { NetMesh } from '@/components/ui/NetMesh'
 
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-gold-50 via-cream-100 to-cream-200 pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      {/* Hero Section - Layered organic design */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        {/* Base gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gold-100 via-cream-100 to-cream-200" />
+
+        {/* Court texture overlay */}
+        <CourtTexture variant="grid" color="#FFCC33" opacity={0.03} />
+
+        {/* Net mesh subtle overlay */}
+        <NetMesh opacity={0.02} />
+
+        {/* Floating ball particles */}
+        <BallParticles count={8} colors={['green', 'pink', 'gold']} className="z-10" />
+
+        {/* Static floating balls at fixed positions */}
+        <FloatingBalls
+          className="z-5"
+          positions={[
+            { x: 8, y: 25, size: 32, color: 'green' },
+            { x: 88, y: 30, size: 24, color: 'pink' },
+            { x: 15, y: 75, size: 28, color: 'gold' },
+            { x: 82, y: 70, size: 20, color: 'green' },
+          ]}
+        />
+
+        {/* Main content */}
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
           <div className="text-center">
-            {/* Animated Crown */}
-            <div className="mb-8 animate-bounce-subtle">
-              <Crown className="w-24 h-24 md:w-32 md:h-32 mx-auto text-gold-500" />
+            {/* Animated Crown with surrounding pickleballs */}
+            <div className="mb-8 relative inline-block">
+              <div className="animate-bounce-subtle">
+                <Crown className="w-24 h-24 md:w-32 md:h-32 mx-auto text-gold-500 drop-shadow-lg" />
+              </div>
+              {/* Orbiting pickleballs */}
+              <div className="absolute -top-4 -left-8 animate-spin-slow">
+                <PickleballSVG size="sm" color="green" />
+              </div>
+              <div className="absolute -top-2 -right-10 animate-spin-slow" style={{ animationDirection: 'reverse' }}>
+                <PickleballSVG size="sm" color="pink" />
+              </div>
             </div>
 
             {/* Headline */}
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-charcoal-900 mb-6">
               Crown Your
-              <span className="block text-gold-600">Pickleball Champion</span>
+              <span className="block text-gold-600 drop-shadow-sm">Pickleball Champion</span>
             </h1>
 
             {/* Subheadline */}
@@ -28,7 +68,7 @@ export default function HomePage() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="primary" size="lg" asChild>
+              <Button variant="primary" size="lg" asChild className="shadow-organic">
                 <Link href="/shop">
                   <Crown className="w-5 h-5 mr-2" />
                   Customize Your Crown
@@ -39,42 +79,60 @@ export default function HomePage() {
               </Button>
             </div>
 
-            {/* Price Badge */}
-            <div className="mt-8 inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-soft">
-              <span className="text-charcoal-600">Starting at</span>
-              <span className="font-bold text-gold-600 text-lg">$19.99</span>
-              <span className="text-pickle-500 text-sm font-medium">+ Free shipping over $35</span>
+            {/* Price Badge - organic styling */}
+            <div className="mt-8 inline-flex items-center gap-3 bg-white/90 backdrop-blur-sm px-5 py-3 rounded-organic shadow-organic">
+              <PickleballSVG size="sm" color="gold" />
+              <div className="text-left">
+                <span className="text-charcoal-600 text-sm">Starting at</span>
+                <span className="block font-bold text-gold-600 text-xl">$19.99</span>
+              </div>
+              <span className="text-pickle-600 text-sm font-medium bg-pickle-100 px-2 py-1 rounded-full">
+                Free shipping over $35
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Decorative pickle balls */}
-        <div className="absolute bottom-10 left-10 w-8 h-8 rounded-full bg-pickle-400 opacity-30 animate-float" />
-        <div className="absolute top-40 right-20 w-6 h-6 rounded-full bg-pink-400 opacity-30 animate-float" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-40 right-40 w-10 h-10 rounded-full bg-pickle-400 opacity-20 animate-float" style={{ animationDelay: '2s' }} />
+        {/* Bottom wave divider */}
+        <div className="absolute bottom-0 left-0 right-0 z-30">
+          <WaveDivider color="#1A1A1A" className="h-16 md:h-24" />
+        </div>
       </section>
 
       {/* Trust Signals */}
-      <section className="bg-charcoal-900 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-charcoal-950 py-12 relative overflow-hidden">
+        {/* Subtle court lines in background */}
+        <div className="absolute inset-0 opacity-5">
+          <CourtTexture variant="grid" color="#FFCC33" opacity={0.1} />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="flex flex-col items-center gap-2">
-              <Star className="w-8 h-8 text-gold-500" />
+              <div className="w-12 h-12 bg-gold-500/10 rounded-organic flex items-center justify-center">
+                <Star className="w-6 h-6 text-gold-500" />
+              </div>
               <span className="text-white font-semibold">5-Star Reviews</span>
               <span className="text-charcoal-400 text-sm">Loved by players</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <Truck className="w-8 h-8 text-gold-500" />
+              <div className="w-12 h-12 bg-gold-500/10 rounded-organic flex items-center justify-center">
+                <Truck className="w-6 h-6 text-gold-500" />
+              </div>
               <span className="text-white font-semibold">Fast Shipping</span>
               <span className="text-charcoal-400 text-sm">Ships from Texas</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <Gift className="w-8 h-8 text-gold-500" />
+              <div className="w-12 h-12 bg-gold-500/10 rounded-organic flex items-center justify-center">
+                <Gift className="w-6 h-6 text-gold-500" />
+              </div>
               <span className="text-white font-semibold">Custom Text</span>
               <span className="text-charcoal-400 text-sm">Personalize it</span>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <Award className="w-8 h-8 text-gold-500" />
+              <div className="w-12 h-12 bg-gold-500/10 rounded-organic flex items-center justify-center">
+                <Award className="w-6 h-6 text-gold-500" />
+              </div>
               <span className="text-white font-semibold">3D Printed</span>
               <span className="text-charcoal-400 text-sm">Quality crafted</span>
             </div>
@@ -83,8 +141,16 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-cream-200 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-cream-200 py-16 md:py-24 relative overflow-hidden">
+        {/* Top court divider */}
+        <div className="absolute top-0 left-0 right-0">
+          <CourtDivider variant="baseline" color="#FFCC33" className="h-6" />
+        </div>
+
+        {/* Background texture */}
+        <CourtTexture variant="composite" color="#FFCC33" opacity={0.02} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
               Why Our Crowns?
@@ -95,10 +161,10 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-white rounded-crown p-6 shadow-soft text-center">
-              <div className="w-16 h-16 bg-gold-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Crown className="w-8 h-8 text-gold-500" />
+            {/* Feature 1 - Organic card */}
+            <div className="card-organic p-6 text-center">
+              <div className="w-16 h-16 bg-gold-100 rounded-organic flex items-center justify-center mx-auto mb-4">
+                <PickleballSVG size="md" color="gold" />
               </div>
               <h3 className="font-display text-xl font-semibold text-charcoal-900 mb-2">
                 Fully Customizable
@@ -110,9 +176,9 @@ export default function HomePage() {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white rounded-crown p-6 shadow-soft text-center">
-              <div className="w-16 h-16 bg-pickle-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-pickle-500" />
+            <div className="card-organic p-6 text-center">
+              <div className="w-16 h-16 bg-pickle-100 rounded-organic flex items-center justify-center mx-auto mb-4">
+                <PickleballSVG size="md" color="green" />
               </div>
               <h3 className="font-display text-xl font-semibold text-charcoal-900 mb-2">
                 Tournament Ready
@@ -124,9 +190,9 @@ export default function HomePage() {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white rounded-crown p-6 shadow-soft text-center">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Gift className="w-8 h-8 text-pink-500" />
+            <div className="card-organic p-6 text-center">
+              <div className="w-16 h-16 bg-pink-100 rounded-organic flex items-center justify-center mx-auto mb-4">
+                <PickleballSVG size="md" color="pink" />
               </div>
               <h3 className="font-display text-xl font-semibold text-charcoal-900 mb-2">
                 Perfect Gift
@@ -138,11 +204,19 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Bottom divider */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <CourtDivider variant="kitchen" color="#FFCC33" className="h-10" flip />
+        </div>
       </section>
 
       {/* Size Guide Preview */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-16 md:py-24 relative overflow-hidden">
+        {/* Subtle net mesh background */}
+        <NetMesh opacity={0.015} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
@@ -154,45 +228,81 @@ export default function HomePage() {
               </p>
 
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 bg-cream-100 rounded-crown">
-                  <span className="font-medium text-charcoal-900">Small</span>
-                  <span className="text-charcoal-600 text-sm">21.5" circumference</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-cream-100 rounded-crown">
-                  <span className="font-medium text-charcoal-900">Medium</span>
-                  <span className="text-charcoal-600 text-sm">22.25" circumference</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-cream-100 rounded-crown">
-                  <span className="font-medium text-charcoal-900">Large</span>
-                  <span className="text-charcoal-600 text-sm">23" circumference</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-cream-100 rounded-crown">
-                  <span className="font-medium text-charcoal-900">X-Large</span>
-                  <span className="text-charcoal-600 text-sm">23.75" circumference</span>
-                </div>
+                {[
+                  { size: 'Small', circ: '21.5"' },
+                  { size: 'Medium', circ: '22.25"' },
+                  { size: 'Large', circ: '23"' },
+                  { size: 'X-Large', circ: '23.75"' },
+                ].map((item, i) => (
+                  <div
+                    key={item.size}
+                    className="flex items-center justify-between p-3 bg-cream-100 rounded-organic shadow-sm hover:shadow-organic transition-shadow"
+                  >
+                    <div className="flex items-center gap-3">
+                      <PickleballSVG size="sm" color={i % 2 === 0 ? 'green' : 'pink'} />
+                      <span className="font-medium text-charcoal-900">{item.size}</span>
+                    </div>
+                    <span className="text-charcoal-600 text-sm">{item.circ} circumference</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="bg-gold-50 rounded-crown p-8 text-center">
-              <Crown className="w-32 h-32 mx-auto text-gold-500 mb-4" />
+            <div className="bg-gradient-to-br from-gold-50 to-gold-100 rounded-organic-lg p-8 text-center relative overflow-hidden">
+              {/* Decorative balls */}
+              <div className="absolute top-4 right-4">
+                <BouncingPickleball size="sm" color="green" />
+              </div>
+              <div className="absolute bottom-4 left-4">
+                <BouncingPickleball size="sm" color="pink" />
+              </div>
+
+              <Crown className="w-32 h-32 mx-auto text-gold-500 mb-4 drop-shadow-lg" />
               <p className="text-charcoal-600">
                 Each crown features 8 points topped with colorful 3D-printed pickleballs
               </p>
+
+              {/* Ball display */}
+              <div className="flex justify-center gap-4 mt-6">
+                <PickleballSVG size="lg" color="green" animated />
+                <PickleballSVG size="lg" color="pink" animated />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="bg-gradient-to-r from-gold-500 to-gold-600 py-16 md:py-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        {/* Gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gold-500 to-gold-600" />
+
+        {/* Court texture overlay */}
+        <CourtTexture variant="grid" color="#000000" opacity={0.03} />
+
+        {/* Floating balls */}
+        <FloatingBalls
+          className="z-5"
+          positions={[
+            { x: 5, y: 30, size: 24, color: 'green' },
+            { x: 95, y: 60, size: 20, color: 'pink' },
+            { x: 10, y: 80, size: 16, color: 'gold' },
+          ]}
+        />
+
+        {/* Top net divider */}
+        <div className="absolute top-0 left-0 right-0">
+          <CourtDivider variant="net" color="#FFFFFF" className="h-12 opacity-20" />
+        </div>
+
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900 mb-4">
             Ready to Crown Your Champion?
           </h2>
-          <p className="text-charcoal-700 mb-8 text-lg">
+          <p className="text-charcoal-800 mb-8 text-lg">
             Design your custom pickleball crown today and make every victory unforgettable.
           </p>
-          <Button variant="secondary" size="lg" asChild>
+          <Button variant="secondary" size="lg" asChild className="shadow-lg">
             <Link href="/shop">
               <Crown className="w-5 h-5 mr-2" />
               Start Customizing

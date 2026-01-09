@@ -111,6 +111,10 @@ const config: Config = {
       borderRadius: {
         'soft': '4px',
         'crown': '8px',
+        // Organic - imperfect corners for natural feel
+        'organic-sm': '4px 6px 5px 7px',
+        'organic': '8px 12px 10px 14px',
+        'organic-lg': '16px 24px 20px 28px',
       },
       boxShadow: {
         'gold': '0 4px 14px rgba(255, 204, 51, 0.25)',
@@ -118,6 +122,11 @@ const config: Config = {
         'pickle': '0 4px 14px rgba(95, 209, 21, 0.25)',
         'soft': '0 4px 14px rgba(0, 0, 0, 0.08)',
         'soft-lg': '0 10px 40px rgba(0, 0, 0, 0.12)',
+        // Organic - dual asymmetric shadows for depth
+        'organic': '2px 4px 12px rgba(255, 204, 51, 0.12), -1px -2px 8px rgba(255, 204, 51, 0.05)',
+        'organic-lg': '4px 8px 24px rgba(255, 204, 51, 0.15), -2px -4px 16px rgba(255, 204, 51, 0.08)',
+        'organic-pickle': '2px 4px 12px rgba(95, 209, 21, 0.12), -1px -2px 8px rgba(95, 209, 21, 0.05)',
+        'court': 'inset 0 2px 8px rgba(59, 130, 246, 0.1)',
       },
       backgroundImage: {
         'gold-gradient': 'linear-gradient(135deg, #FFCC33 0%, #E6B800 100%)',
@@ -132,6 +141,11 @@ const config: Config = {
         'float': 'float 6s ease-in-out infinite',
         'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
         'crown-glow': 'crownGlow 2s ease-in-out infinite',
+        // Organic animations
+        'blob-breathe': 'blobBreathe 8s ease-in-out infinite',
+        'ball-bounce': 'ballBounce 3s ease-in-out infinite',
+        'net-sway': 'netSway 4s ease-in-out infinite',
+        'spin-slow': 'spinSlow 20s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -161,6 +175,23 @@ const config: Config = {
         crownGlow: {
           '0%, 100%': { boxShadow: '0 0 20px rgba(255, 204, 51, 0.4)' },
           '50%': { boxShadow: '0 0 40px rgba(255, 204, 51, 0.6)' },
+        },
+        // Organic keyframes
+        blobBreathe: {
+          '0%, 100%': { transform: 'scale(1) rotate(0deg)' },
+          '50%': { transform: 'scale(1.02) rotate(1deg)' },
+        },
+        ballBounce: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-15px) rotate(180deg)' },
+        },
+        netSway: {
+          '0%, 100%': { transform: 'skewX(0deg)' },
+          '50%': { transform: 'skewX(1deg)' },
+        },
+        spinSlow: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
       transitionTimingFunction: {

@@ -63,6 +63,15 @@
     @apply bg-white rounded-crown shadow-soft transition-all duration-300 hover:shadow-soft-lg;
   }
 
+  /* Organic card - imperfect corners and dual shadows */
+  .card-organic {
+    border-radius: 8px 12px 10px 14px;
+    @apply bg-white shadow-organic transition-all duration-300;
+  }
+  .card-organic:hover {
+    @apply shadow-organic-lg -translate-y-1;
+  }
+
   /* Link styles */
   .link-underline {
     @apply relative inline-block;
@@ -104,6 +113,63 @@
   }
 }
 
+/* ================================
+   ORGANIC TEXTURES & OVERLAYS
+   ================================ */
+
+/* Global grain overlay - subtle texture across entire page */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  z-index: 9999;
+}
+
+/* Court surface texture - subtle grid pattern */
+.texture-court {
+  position: relative;
+}
+.texture-court::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(59, 130, 246, 0.02) 20px, rgba(59, 130, 246, 0.02) 21px),
+    repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(59, 130, 246, 0.02) 20px, rgba(59, 130, 246, 0.02) 21px);
+  opacity: 0.5;
+}
+
+/* Net mesh texture */
+.texture-net {
+  position: relative;
+}
+.texture-net::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 L10 0 L20 10 L10 20 Z' fill='none' stroke='%23666' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+  opacity: 0.03;
+}
+
+/* Paper-like texture */
+.texture-paper {
+  position: relative;
+}
+.texture-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperNoise)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  opacity: 0.04;
+}
+
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -116,5 +182,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .grain-overlay {
+    display: none;
   }
 }
