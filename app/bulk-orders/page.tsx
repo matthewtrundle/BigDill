@@ -108,7 +108,7 @@ export default function BulkOrdersPage() {
             TOURNAMENT & LEAGUE ORDERS
           </h1>
           <p className="font-heading text-charcoal-600 max-w-2xl mx-auto text-lg">
-            Custom crowns and medals for your pickleball events. Volume discounts up to 30% off.
+            Custom crowns and medals for your pickleball events. Volume discounts up to 20% off.
             Individual customization for every winner.
           </p>
         </div>
@@ -326,10 +326,10 @@ export default function BulkOrdersPage() {
                 </div>
                 <div className="border-t border-cream-200 pt-4">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-charcoal-900">$179.85</span>
+                    <span className="text-2xl font-bold text-charcoal-900">$189.86</span>
                     <span className="text-sm text-charcoal-400 line-through">$199.85</span>
                   </div>
-                  <span className="text-pickle-600 text-sm font-medium">Save 10%</span>
+                  <span className="text-pickle-600 text-sm font-medium">Save 5%</span>
                 </div>
                 <Button
                   variant="outline"
@@ -361,10 +361,10 @@ export default function BulkOrdersPage() {
                 </div>
                 <div className="border-t border-cream-200 pt-4">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-charcoal-900">$424.15</span>
+                    <span className="text-2xl font-bold text-charcoal-900">$449.64</span>
                     <span className="text-sm text-charcoal-400 line-through">$499.60</span>
                   </div>
-                  <span className="text-pickle-600 text-sm font-medium">Save 15%</span>
+                  <span className="text-pickle-600 text-sm font-medium">Save 10%</span>
                 </div>
                 <Button
                   variant="primary"
@@ -396,10 +396,10 @@ export default function BulkOrdersPage() {
                 </div>
                 <div className="border-t border-cream-200 pt-4">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-charcoal-900">$936.75</span>
+                    <span className="text-2xl font-bold text-charcoal-900">$999.20</span>
                     <span className="text-sm text-charcoal-400 line-through">$1,249.00</span>
                   </div>
-                  <span className="text-pickle-600 text-sm font-medium">Save 25%</span>
+                  <span className="text-pickle-600 text-sm font-medium">Save 20%</span>
                 </div>
                 <Button
                   variant="outline"
@@ -440,7 +440,7 @@ export default function BulkOrdersPage() {
 
                 <div className="space-y-4">
                   {[
-                    { icon: Award, title: 'Exclusive Pricing', desc: 'Up to 35% off for wholesale accounts' },
+                    { icon: Award, title: 'Exclusive Pricing', desc: 'Up to 25% off for wholesale accounts' },
                     { icon: Clock, title: 'Net 30 Terms', desc: 'Invoice payment options for qualified accounts' },
                     { icon: Users, title: 'Dedicated Support', desc: 'Personal account manager for large orders' },
                     { icon: Zap, title: 'Priority Production', desc: 'Jump the queue for urgent event needs' },

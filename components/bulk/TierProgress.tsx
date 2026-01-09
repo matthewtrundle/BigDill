@@ -4,12 +4,10 @@ import { Percent, TrendingUp, Sparkles } from 'lucide-react'
 
 // Bulk discount tiers
 export const discountTiers = [
-  { min: 1, max: 4, discount: 0, label: 'No discount', badge: null },
-  { min: 5, max: 9, discount: 0.10, label: '10% off', badge: null },
-  { min: 10, max: 24, discount: 0.15, label: '15% off', badge: 'Most Popular' },
-  { min: 25, max: 49, discount: 0.20, label: '20% off', badge: 'Best Value' },
-  { min: 50, max: 99, discount: 0.25, label: '25% off', badge: 'Tournament' },
-  { min: 100, max: Infinity, discount: 0.30, label: '30% off', badge: 'Wholesale' },
+  { min: 1, max: 14, discount: 0, label: 'No discount', badge: null },
+  { min: 15, max: 39, discount: 0.05, label: '5% off', badge: null },
+  { min: 40, max: 99, discount: 0.10, label: '10% off', badge: 'Best Value' },
+  { min: 100, max: Infinity, discount: 0.20, label: '20% off', badge: 'Wholesale' },
 ]
 
 export function getDiscountTier(quantity: number) {
