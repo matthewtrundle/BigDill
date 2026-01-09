@@ -11,9 +11,9 @@ import { useCart } from '@/lib/cart-context'
 
 const navLinks = [
   { href: '/shop', label: 'Shop' },
+  { href: '/bulk-orders', label: 'Bulk Orders' },
   { href: '/about', label: 'About' },
   { href: '/faq', label: 'FAQ' },
-  { href: '/shipping', label: 'Shipping' },
   { href: '/contact', label: 'Contact' },
 ]
 
