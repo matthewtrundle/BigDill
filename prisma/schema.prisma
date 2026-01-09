@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================
+// CUSTOMER & ORDER MODELS
+// ===========================================
+
+model Customer {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  firstName   String?
+  lastName    String?
+  phone       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  orders      Order[]
+  addresses   Address[]
+
+  @@index([email])
+}
+
+model Address {
+  id          String      @id @default(uuid())
+  customerId  String
+  firstName   String
+  lastName    String
+  street      String
+  street2     String?
+  city        String
+  state       String
+  zip         String
+  country     String      @default("US")
+  phone       String?
+  isDefault   Boolean     @default(false)
+  type        AddressType @default(BOTH)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  customer    Customer    @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@index([isDefault])
+}
+
+model Order {
+  id               String        @id @default(uuid())
+  orderNumber      String        @unique
+  customerId       String?
+  email            String
+
+  // Order totals (in cents)
+  subtotal         Int
+  shipping         Int
+  tax              Int
+  total            Int
+
+  // Status
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
+
+  // Stripe
+  stripePaymentId  String?
+  stripeSessionId  String?
+
+  // Shipping details
+  shippingName     String?
+  shippingAddress1 String?
+  shippingAddress2 String?
+  shippingCity     String?
+  shippingState    String?
+  shippingZip      String?
+  shippingCountry  String?
+  shippingPhone    String?
+  shippingMethod   String?
+
+  // Fulfillment
+  trackingNumber   String?
+  carrier          String?
+  labelUrl         String?
+
+  // Timestamps
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  shippedAt        DateTime?
+  deliveredAt      DateTime?
+
+  // Relations
+  customer         Customer?     @relation(fields: [customerId], references: [id])
+  items            OrderItem[]
+
+  @@index([customerId])
+  @@index([email])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([stripeSessionId])
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  sku       String?
+  name      String
+  price     Int      // in cents
+  quantity  Int
+  weight    Int?     // in ounces
+
+  // Crown customization options
+  size      String?  // small, medium, large, xlarge
+  ballColor String?  // green, pink
+  customText String? // personalized text on crown
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+}
+
+// ===========================================
+// WHOLESALE MODELS
+// ===========================================
+
+model WholesaleInquiry {
+  id              String        @id @default(uuid())
+  businessName    String
+  contactName     String
+  email           String
+  phone           String?
+  businessType    String
+  estimatedVolume String
+  message         String?
+  status          InquiryStatus @default(PENDING)
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+}
+
+// ===========================================
+// ENUMS
+// ===========================================
+
+enum AddressType {
+  SHIPPING
+  BILLING
+  BOTH
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum InquiryStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  CONTACTED
+}
