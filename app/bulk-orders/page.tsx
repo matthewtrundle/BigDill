@@ -396,10 +396,10 @@ export default function BulkOrdersPage() {
                 </div>
                 <div className="border-t border-cream-200 pt-4">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-charcoal-900">$999.20</span>
+                    <span className="text-2xl font-bold text-charcoal-900">$936.75</span>
                     <span className="text-sm text-charcoal-400 line-through">$1,249.00</span>
                   </div>
-                  <span className="text-pickle-600 text-sm font-medium">Save 20%</span>
+                  <span className="text-pickle-600 text-sm font-medium">Save 25%</span>
                 </div>
                 <Button
                   variant="outline"

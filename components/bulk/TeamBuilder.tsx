@@ -166,7 +166,7 @@ export function TeamBuilder({ isOpen, onClose }: TeamBuilderProps) {
             <div className="flex-1 overflow-hidden flex">
               {/* Left: Items List */}
               <div className="flex-1 overflow-y-auto p-6">
-                {items.length === 0 ? (
+                {items.length === 0 && !isAddingNew ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 bg-cream-200 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Crown className="w-8 h-8 text-cream-400" />
@@ -181,6 +181,118 @@ export function TeamBuilder({ isOpen, onClose }: TeamBuilderProps) {
                       <Plus className="w-4 h-4 mr-2" />
                       Add First Item
                     </Button>
+                  </div>
+                ) : items.length === 0 && isAddingNew ? (
+                  <div className="space-y-3">
+                    {/* Add New Item Form when no items */}
+                    <div className="bg-gold-50 rounded-organic p-4 border-2 border-gold-300">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gold-700">New Item</span>
+                        <button
+                          onClick={() => setIsAddingNew(false)}
+                          className="text-sm text-charcoal-500 hover:text-charcoal-700"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+
+                      {/* Product Selection */}
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        <button
+                          onClick={() => setNewItem(prev => ({ ...prev, sku: 'CROWN-1' }))}
+                          className={`p-3 rounded-organic border-2 transition-all ${
+                            newItem.sku === 'CROWN-1'
+                              ? 'border-gold-500 bg-white'
+                              : 'border-cream-300 bg-white hover:border-gold-300'
+                          }`}
+                        >
+                          <Crown className="w-5 h-5 mx-auto mb-1 text-gold-600" />
+                          <span className="text-sm font-medium">Crown</span>
+                          <span className="block text-xs text-charcoal-500">$19.99</span>
+                        </button>
+                        <button
+                          onClick={() => setNewItem(prev => ({ ...prev, sku: 'MEDAL-1' }))}
+                          className={`p-3 rounded-organic border-2 transition-all ${
+                            newItem.sku === 'MEDAL-1'
+                              ? 'border-gold-500 bg-white'
+                              : 'border-cream-300 bg-white hover:border-gold-300'
+                          }`}
+                        >
+                          <Medal className="w-5 h-5 mx-auto mb-1 text-gold-600" />
+                          <span className="text-sm font-medium">Medal</span>
+                          <span className="block text-xs text-charcoal-500">$9.99</span>
+                        </button>
+                      </div>
+
+                      {/* Size (crowns only) */}
+                      {newItem.sku === 'CROWN-1' && (
+                        <div className="mb-3">
+                          <label className="block text-xs font-medium text-charcoal-600 mb-1">Size</label>
+                          <div className="grid grid-cols-4 gap-1">
+                            {crownSizes.map(size => (
+                              <button
+                                key={size.id}
+                                onClick={() => setNewItem(prev => ({ ...prev, size: size.id }))}
+                                className={`p-2 rounded text-xs transition-all ${
+                                  newItem.size === size.id
+                                    ? 'bg-gold-500 text-charcoal-900 font-semibold'
+                                    : 'bg-white text-charcoal-600 hover:bg-cream-100'
+                                }`}
+                              >
+                                {size.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Color */}
+                      <div className="mb-3">
+                        <label className="block text-xs font-medium text-charcoal-600 mb-1">Color</label>
+                        <div className="flex gap-2">
+                          {ballColors.map(color => (
+                            <button
+                              key={color.id}
+                              onClick={() => setNewItem(prev => ({ ...prev, color: color.id }))}
+                              className={`flex items-center gap-2 px-3 py-2 rounded transition-all ${
+                                newItem.color === color.id
+                                  ? 'bg-gold-500 text-charcoal-900'
+                                  : 'bg-white text-charcoal-600 hover:bg-cream-100'
+                              }`}
+                            >
+                              <span
+                                className="w-4 h-4 rounded-full border border-white shadow-sm"
+                                style={{ backgroundColor: color.hex }}
+                              />
+                              {color.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Custom Text */}
+                      <div className="mb-3">
+                        <label className="block text-xs font-medium text-charcoal-600 mb-1">
+                          Custom Text (optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={newItem.customText}
+                          onChange={(e) => setNewItem(prev => ({ ...prev, customText: e.target.value.slice(0, currentProduct.maxTextLength) }))}
+                          placeholder="e.g., Player name, team name"
+                          className="w-full px-3 py-2 rounded-organic border border-cream-300 text-sm focus:border-gold-500 focus:outline-none bg-white"
+                          maxLength={currentProduct.maxTextLength}
+                        />
+                        <p className="text-xs text-charcoal-400 mt-1">
+                          {newItem.customText.length}/{currentProduct.maxTextLength}
+                        </p>
+                      </div>
+
+                      <Button variant="primary" className="w-full" onClick={handleAddItem}>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add to Order
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-3">
