@@ -19,6 +19,27 @@ export interface CartItem {
   options: CartItemOptions
 }
 
+// Bulk discount tiers - must match TierProgress.tsx
+const bulkDiscountTiers = [
+  { min: 1, max: 4, discount: 0 },
+  { min: 5, max: 9, discount: 0.10 },
+  { min: 10, max: 24, discount: 0.15 },
+  { min: 25, max: 49, discount: 0.20 },
+  { min: 50, max: 99, discount: 0.25 },
+  { min: 100, max: Infinity, discount: 0.30 },
+]
+
+function getBulkDiscountRate(quantity: number): number {
+  const tier = bulkDiscountTiers.find(t => quantity >= t.min && quantity <= t.max)
+  return tier?.discount || 0
+}
+
+interface BulkDiscountInfo {
+  rate: number
+  label: string
+  savings: number
+}
+
 interface CartContextType {
   items: CartItem[]
   isOpen: boolean
@@ -31,6 +52,8 @@ interface CartContextType {
   clearCart: () => void
   getItemCount: () => number
   getSubtotal: () => number
+  getBulkDiscount: () => BulkDiscountInfo
+  getDiscountedSubtotal: () => number
   getShipping: () => number
   getTotal: () => number
   getCartProducts: () => (CartItem & { product: Product })[]
@@ -119,8 +142,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, 0)
   }
 
-  const getShipping = () => {
+  const getBulkDiscount = (): BulkDiscountInfo => {
+    const itemCount = getItemCount()
     const subtotal = getSubtotal()
+    const rate = getBulkDiscountRate(itemCount)
+    const savings = Math.round(subtotal * rate)
+
+    let label = 'No discount'
+    if (rate === 0.10) label = '10% off'
+    else if (rate === 0.15) label = '15% off'
+    else if (rate === 0.20) label = '20% off'
+    else if (rate === 0.25) label = '25% off'
+    else if (rate === 0.30) label = '30% off'
+
+    return { rate, label, savings }
+  }
+
+  const getDiscountedSubtotal = () => {
+    const subtotal = getSubtotal()
+    const { rate } = getBulkDiscount()
+    return Math.round(subtotal * (1 - rate))
+  }
+
+  const getShipping = () => {
+    const subtotal = getDiscountedSubtotal()
     if (subtotal >= FREE_SHIPPING_THRESHOLD) {
       return 0
     }
@@ -128,7 +173,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const getTotal = () => {
-    return getSubtotal() + getShipping()
+    return getDiscountedSubtotal() + getShipping()
   }
 
   const getCartProducts = () => {
@@ -155,6 +200,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         getItemCount,
         getSubtotal,
+        getBulkDiscount,
+        getDiscountedSubtotal,
         getShipping,
         getTotal,
         getCartProducts,

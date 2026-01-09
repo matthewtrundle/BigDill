@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
-import { ArrowLeft, Package, Truck, MapPin, Mail, Phone, Crown } from 'lucide-react'
+import { useParams } from 'next/navigation'
+import { ArrowLeft, Package, Truck, MapPin, Mail, Phone, Crown, ExternalLink, Star, Gift, MessageSquare } from 'lucide-react'
 
 interface OrderItem {
   id: string
@@ -43,17 +43,30 @@ interface Order {
   items: OrderItem[]
 }
 
+interface FeedbackStatus {
+  id: string
+  rating: number | null
+  comment: string | null
+  emailSentAt: string | null
+  submittedAt: string | null
+  couponCode: string | null
+  couponUsed: boolean
+  expiresAt: string
+}
+
 export default function OrderDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
   const [trackingNumber, setTrackingNumber] = useState('')
   const [carrier, setCarrier] = useState('')
+  const [feedback, setFeedback] = useState<FeedbackStatus | null>(null)
+  const [sendingFeedback, setSendingFeedback] = useState(false)
 
   useEffect(() => {
     fetchOrder()
+    fetchFeedback()
   }, [params.id])
 
   const fetchOrder = async () => {
@@ -69,6 +82,38 @@ export default function OrderDetailPage() {
       console.error('Failed to fetch order:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchFeedback = async () => {
+    try {
+      const res = await fetch(`/api/admin/orders/${params.id}/feedback`)
+      if (res.ok) {
+        const data = await res.json()
+        setFeedback(data.feedback)
+      }
+    } catch (error) {
+      console.error('Failed to fetch feedback:', error)
+    }
+  }
+
+  const sendFeedbackRequest = async () => {
+    setSendingFeedback(true)
+    try {
+      const res = await fetch(`/api/admin/orders/${params.id}/feedback`, {
+        method: 'POST',
+      })
+      if (res.ok) {
+        await fetchFeedback()
+      } else {
+        const data = await res.json()
+        alert(data.error || 'Failed to send feedback request')
+      }
+    } catch (error) {
+      console.error('Failed to send feedback request:', error)
+      alert('Failed to send feedback request')
+    } finally {
+      setSendingFeedback(false)
     }
   }
 
@@ -124,6 +169,18 @@ export default function OrderDetailPage() {
   const ballColorStyles: Record<string, string> = {
     green: 'bg-pickle-400',
     pink: 'bg-pink-400',
+  }
+
+  const getTrackingUrl = (carrier: string, trackingNumber: string): string => {
+    const normalizedCarrier = carrier.toLowerCase()
+    if (normalizedCarrier.includes('usps')) {
+      return `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNumber}`
+    } else if (normalizedCarrier.includes('ups')) {
+      return `https://www.ups.com/track?tracknum=${trackingNumber}`
+    } else if (normalizedCarrier.includes('fedex')) {
+      return `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`
+    }
+    return ''
   }
 
   if (loading) {
@@ -313,6 +370,9 @@ export default function OrderDetailPage() {
                       <Truck className="w-5 h-5" />
                       {updating ? 'Updating...' : 'Mark as Shipped'}
                     </button>
+                    <p className="text-xs text-charcoal-500 text-center mt-2">
+                      Customer will receive a shipping confirmation email with tracking info
+                    </p>
                   </div>
                 )}
 
@@ -399,7 +459,7 @@ export default function OrderDetailPage() {
                 </h2>
                 <div className="flex items-start gap-3">
                   <Truck className="w-5 h-5 text-charcoal-400 mt-0.5" />
-                  <div>
+                  <div className="flex-1">
                     <p className="text-sm text-charcoal-500">{order.carrier || 'Carrier'}</p>
                     <p className="font-mono text-charcoal-900">{order.trackingNumber}</p>
                     {order.shippedAt && (
@@ -407,10 +467,118 @@ export default function OrderDetailPage() {
                         Shipped {formatDate(order.shippedAt)}
                       </p>
                     )}
+                    {order.carrier && getTrackingUrl(order.carrier, order.trackingNumber) && (
+                      <a
+                        href={getTrackingUrl(order.carrier, order.trackingNumber)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 mt-3 text-sm font-medium text-gold-600 hover:text-gold-700"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Track Package
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
             )}
+
+            {/* Customer Feedback */}
+            <div className="bg-white rounded-crown shadow-soft p-6">
+              <h2 className="font-display text-lg font-semibold text-charcoal-900 mb-4">
+                Customer Feedback
+              </h2>
+
+              {feedback ? (
+                <div className="space-y-4">
+                  {/* Feedback Status */}
+                  {feedback.submittedAt ? (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-5 h-5 ${
+                                star <= (feedback.rating || 0)
+                                  ? 'text-gold-400 fill-gold-400'
+                                  : 'text-cream-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-charcoal-600">
+                          ({feedback.rating}/5)
+                        </span>
+                      </div>
+
+                      {feedback.comment && (
+                        <div className="flex items-start gap-2 bg-cream-50 rounded-lg p-3">
+                          <MessageSquare className="w-4 h-4 text-charcoal-400 mt-0.5 flex-shrink-0" />
+                          <p className="text-sm text-charcoal-700">{feedback.comment}</p>
+                        </div>
+                      )}
+
+                      {feedback.couponCode && (
+                        <div className="flex items-center gap-2 bg-gold-50 rounded-lg p-3">
+                          <Gift className="w-4 h-4 text-gold-500" />
+                          <div>
+                            <span className="text-xs text-charcoal-500">Coupon issued: </span>
+                            <span className="font-mono font-medium text-gold-600">
+                              {feedback.couponCode}
+                            </span>
+                            {feedback.couponUsed && (
+                              <span className="ml-2 text-xs text-green-600">(Used)</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <p className="text-xs text-charcoal-500">
+                        Submitted {formatDate(feedback.submittedAt)}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2 text-sm text-charcoal-600">
+                        <Mail className="w-4 h-4" />
+                        <span>
+                          {feedback.emailSentAt
+                            ? `Request sent ${formatDate(feedback.emailSentAt)}`
+                            : 'Request created but not sent'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-charcoal-500">
+                        Expires {formatDate(feedback.expiresAt)}
+                      </p>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <p className="text-sm text-charcoal-600">
+                    No feedback request sent yet.
+                  </p>
+
+                  {(order.status === 'SHIPPED' || order.status === 'DELIVERED') && (
+                    <button
+                      onClick={sendFeedbackRequest}
+                      disabled={sendingFeedback}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gold-500 text-charcoal-900 text-sm font-medium rounded-crown hover:bg-gold-600 transition-colors disabled:opacity-50"
+                    >
+                      <Star className="w-4 h-4" />
+                      {sendingFeedback ? 'Sending...' : 'Request Feedback'}
+                    </button>
+                  )}
+
+                  {order.status !== 'SHIPPED' && order.status !== 'DELIVERED' && (
+                    <p className="text-xs text-charcoal-400 text-center">
+                      Available once order is shipped
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

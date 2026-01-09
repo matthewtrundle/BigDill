@@ -1,18 +1,23 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import { Crown, Star, Truck, Shield, Users } from 'lucide-react'
+import Image from 'next/image'
+import { Crown, Medal, Star, Truck, Shield, Users } from 'lucide-react'
 import { ProductCustomizer } from '@/components/product/ProductCustomizer'
 import { products } from '@/lib/products'
 import { PickleballSVG, BouncingPickleball } from '@/components/ui/PickleballSVG'
-import { CourtTexture, CourtLines } from '@/components/ui/CourtTexture'
+import { CourtTexture } from '@/components/ui/CourtTexture'
 import { NetMesh } from '@/components/ui/NetMesh'
 import { FloatingBalls } from '@/components/ui/BallParticles'
 import { CourtDivider } from '@/components/ui/CourtDivider'
 import { Button } from '@/components/ui/Button'
 
 export default function ShopPage() {
-  const product = products[0] // We only have one product for now
+  const [selectedProduct, setSelectedProduct] = useState<string>('CROWN-1')
+  const crown = products.find(p => p.sku === 'CROWN-1')!
+  const medal = products.find(p => p.sku === 'MEDAL-1')!
+  const currentProduct = products.find(p => p.sku === selectedProduct)!
 
   return (
     <div className="min-h-screen bg-cream-100 pt-24 pb-16 relative overflow-hidden">
@@ -22,52 +27,108 @@ export default function ShopPage() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <PickleballSVG size="md" color="green" />
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-charcoal-900">
-              Design Your Crown
-            </h1>
-            <PickleballSVG size="md" color="pink" />
-          </div>
-          <p className="text-charcoal-600 max-w-2xl mx-auto">
-            Customize every detail of your pickleball crown. Choose your size, pick your ball color,
-            and add personalized text to create the ultimate champion's trophy.
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl tracking-wide text-charcoal-900 mb-4">
+            SHOP
+          </h1>
+          <p className="font-heading text-charcoal-600 max-w-2xl mx-auto text-lg">
+            Customize your perfect pickleball crown or medal. The ultimate champion's trophy.
           </p>
         </div>
 
+        {/* Product Selection Tabs */}
+        <div className="flex justify-center gap-4 mb-12">
+          <button
+            onClick={() => setSelectedProduct('CROWN-1')}
+            className={`flex items-center gap-3 px-6 py-4 rounded-organic transition-all ${
+              selectedProduct === 'CROWN-1'
+                ? 'bg-gold-500 text-charcoal-900 shadow-gold-lg'
+                : 'bg-white text-charcoal-700 shadow-organic hover:shadow-organic-lg'
+            }`}
+          >
+            <Crown className="w-6 h-6" />
+            <div className="text-left">
+              <span className="font-heading font-bold block">Crowns</span>
+              <span className="text-sm opacity-80">From $19.99</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setSelectedProduct('MEDAL-1')}
+            className={`flex items-center gap-3 px-6 py-4 rounded-organic transition-all ${
+              selectedProduct === 'MEDAL-1'
+                ? 'bg-gold-500 text-charcoal-900 shadow-gold-lg'
+                : 'bg-white text-charcoal-700 shadow-organic hover:shadow-organic-lg'
+            }`}
+          >
+            <Medal className="w-6 h-6" />
+            <div className="text-left">
+              <span className="font-heading font-bold block">Medals</span>
+              <span className="text-sm opacity-80">From $9.99</span>
+            </div>
+          </button>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Product Image/Preview - Organic styling */}
+          {/* Product Image/Preview */}
           <div className="order-1 lg:order-1">
-            <div className="bg-gradient-to-br from-gold-50 to-gold-100 rounded-organic-lg p-8 aspect-square flex items-center justify-center sticky top-28 shadow-organic relative overflow-hidden">
-              {/* Background court lines */}
-              <CourtLines opacity={0.08} />
-
-              {/* Decorative balls */}
-              <div className="absolute top-4 left-4">
-                <BouncingPickleball size="sm" color="green" />
-              </div>
-              <div className="absolute top-4 right-4">
-                <BouncingPickleball size="sm" color="pink" />
-              </div>
-              <div className="absolute bottom-4 left-4">
-                <BouncingPickleball size="sm" color="gold" />
-              </div>
-              <div className="absolute bottom-4 right-4">
-                <BouncingPickleball size="sm" color="green" />
-              </div>
-
-              {/* Main crown preview */}
-              <div className="text-center relative z-10">
-                <div className="relative">
-                  <Crown className="w-48 h-48 md:w-64 md:h-64 mx-auto text-gold-500 animate-bounce-subtle drop-shadow-lg" />
-                  {/* Pickleballs on crown points */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                    <PickleballSVG size="sm" color="green" animated />
+            <div className="bg-white rounded-organic-lg p-4 sticky top-28 shadow-organic relative overflow-hidden">
+              {/* Product Image */}
+              <div className="relative aspect-square rounded-organic overflow-hidden">
+                <Image
+                  src={currentProduct.image}
+                  alt={currentProduct.name}
+                  fill
+                  className="object-cover"
+                />
+                {currentProduct.isBestSeller && (
+                  <div className="absolute top-4 left-4 bg-gold-500 text-charcoal-900 px-3 py-1 rounded-full text-sm font-bold">
+                    Best Seller
                   </div>
-                </div>
-                <p className="mt-6 text-charcoal-600 text-sm bg-white/70 backdrop-blur-sm px-4 py-2 rounded-organic inline-block">
-                  Your custom crown preview
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div className="mt-4 text-center">
+                <h2 className="font-display text-3xl tracking-wide text-charcoal-900">
+                  {currentProduct.name.toUpperCase()}
+                </h2>
+                <p className="text-charcoal-600 mt-2 text-sm">
+                  {currentProduct.description}
                 </p>
+              </div>
+
+              {/* Additional Images */}
+              <div className="mt-4 grid grid-cols-4 gap-2">
+                {selectedProduct === 'CROWN-1' ? (
+                  <>
+                    <div className="relative aspect-square rounded-lg overflow-hidden">
+                      <Image src="/images/il_1588xN.6679666150_a6ho.webp" alt="Crown view 2" fill className="object-cover" />
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden">
+                      <Image src="/images/il_1588xN.6686537704_76kj.webp" alt="Crown view 3" fill className="object-cover" />
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden">
+                      <Image src="/images/tropy1.webp" alt="Crown view 4" fill className="object-cover" />
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden bg-gold-100 flex items-center justify-center">
+                      <Crown className="w-8 h-8 text-gold-500" />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="relative aspect-square rounded-lg overflow-hidden">
+                      <Image src="/images/Medal2.jpg" alt="Medal view 2" fill className="object-cover" />
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden bg-gold-100 flex items-center justify-center">
+                      <span className="text-gold-600 font-bold text-xs">GOLD</span>
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-600 font-bold text-xs">SILVER</span>
+                    </div>
+                    <div className="relative aspect-square rounded-lg overflow-hidden bg-amber-100 flex items-center justify-center">
+                      <span className="text-amber-700 font-bold text-xs">BRONZE</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -75,10 +136,10 @@ export default function ShopPage() {
           {/* Product Customizer */}
           <div className="order-2 lg:order-2">
             <div className="card-organic p-6">
-              <ProductCustomizer product={product} />
+              <ProductCustomizer product={currentProduct} />
             </div>
 
-            {/* Trust Badges - Organic styling */}
+            {/* Trust Badges */}
             <div className="mt-8 grid grid-cols-3 gap-4">
               <div className="card-organic text-center p-4">
                 <div className="w-10 h-10 bg-gold-100 rounded-organic flex items-center justify-center mx-auto mb-2">
@@ -105,10 +166,7 @@ export default function ShopPage() {
         {/* Bulk Order CTA */}
         <div className="mt-16 relative">
           <div className="bg-gradient-to-r from-pickle-500 to-pickle-600 rounded-organic-lg p-8 text-center relative overflow-hidden">
-            {/* Net mesh overlay */}
             <NetMesh opacity={0.05} />
-
-            {/* Floating balls */}
             <FloatingBalls
               className="z-5"
               positions={[
@@ -116,18 +174,17 @@ export default function ShopPage() {
                 { x: 92, y: 70, size: 18, color: 'pink' },
               ]}
             />
-
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
                 <Users className="w-5 h-5 text-white" />
                 <span className="text-white font-medium">For Tournaments & Leagues</span>
               </div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">
-                Need Multiple Crowns?
+              <h2 className="font-display text-3xl md:text-4xl tracking-wide text-white mb-4">
+                NEED BULK ORDERS?
               </h2>
-              <p className="text-white/90 max-w-xl mx-auto mb-6">
+              <p className="font-heading text-white/90 max-w-xl mx-auto mb-6">
                 Planning a tournament, league event, or team gift? We offer special pricing
-                on bulk orders of 5+ crowns. Get a custom quote today!
+                on bulk orders of 5+ crowns or medals. Get a custom quote today!
               </p>
               <Button variant="secondary" size="lg" asChild>
                 <Link href="/bulk-orders">
@@ -144,23 +201,23 @@ export default function ShopPage() {
           <CourtDivider variant="centerline" color="#FFCC33" className="h-4" />
         </div>
 
-        {/* FAQ Section - Organic styling */}
-        <div className="max-w-3xl mx-auto">
+        {/* FAQ Section */}
+        <div className="max-w-3xl mx-auto" id="faq">
           <div className="text-center mb-8">
-            <h2 className="font-display text-2xl font-bold text-charcoal-900 mb-2">
-              Frequently Asked Questions
+            <h2 className="font-display text-3xl md:text-4xl tracking-wide text-charcoal-900 mb-2">
+              FAQ
             </h2>
-            <p className="text-charcoal-600 text-sm">
-              Everything you need to know about your crown
+            <p className="font-heading text-charcoal-600 text-sm">
+              Everything you need to know about our products
             </p>
           </div>
 
           <div className="space-y-4">
             <details className="card-organic p-4 group">
-              <summary className="font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-heading font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <PickleballSVG size="sm" color="green" />
-                  How do I measure for the right size?
+                  How do I measure for the right crown size?
                 </div>
                 <span className="w-6 h-6 rounded-full bg-gold-100 flex items-center justify-center text-gold-600 group-open:rotate-45 transition-transform">+</span>
               </summary>
@@ -172,7 +229,7 @@ export default function ShopPage() {
             </details>
 
             <details className="card-organic p-4 group">
-              <summary className="font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-heading font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <PickleballSVG size="sm" color="pink" />
                   How long does shipping take?
@@ -181,35 +238,35 @@ export default function ShopPage() {
               </summary>
               <p className="mt-3 text-charcoal-600 text-sm pl-11">
                 We ship from Texas and most orders arrive within 3-7 business days.
-                Orders over $35 ship free! You'll receive a tracking number once your crown ships.
+                Orders over $35 ship free! You'll receive a tracking number once your order ships.
               </p>
             </details>
 
             <details className="card-organic p-4 group">
-              <summary className="font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-heading font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <PickleballSVG size="sm" color="gold" />
-                  Can I request custom crown colors?
+                  What medal finishes are available?
                 </div>
                 <span className="w-6 h-6 rounded-full bg-gold-100 flex items-center justify-center text-gold-600 group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-3 text-charcoal-600 text-sm pl-11">
-                Currently we offer gold crowns with green or pink pickleball toppers.
-                For custom color requests or bulk orders, please <Link href="/bulk-orders" className="text-gold-600 hover:underline">contact us for a custom quote</Link>!
+                Our medals come in gold, silver, and bronze finishes. They're made from high-quality
+                laser-engraved wood with a beautiful natural finish. Perfect for 1st, 2nd, and 3rd place awards!
               </p>
             </details>
 
             <details className="card-organic p-4 group">
-              <summary className="font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
+              <summary className="font-heading font-semibold text-charcoal-900 cursor-pointer list-none flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <PickleballSVG size="sm" color="green" />
-                  Is this a good gift for pickleball players?
+                  Can I add custom text to both products?
                 </div>
                 <span className="w-6 h-6 rounded-full bg-gold-100 flex items-center justify-center text-gold-600 group-open:rotate-45 transition-transform">+</span>
               </summary>
               <p className="mt-3 text-charcoal-600 text-sm pl-11">
-                Absolutely! Our crowns make fantastic gifts for birthdays, tournament prizes, league awards,
-                or just to celebrate the pickleball king or queen in your life. Add custom text to personalize it!
+                Yes! Both crowns and medals can be personalized with custom text. Add tournament names,
+                dates, player names, or team names to make your award truly special.
               </p>
             </details>
           </div>

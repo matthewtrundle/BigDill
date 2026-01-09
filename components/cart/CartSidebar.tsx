@@ -16,6 +16,8 @@ export function CartSidebar() {
     updateQuantity,
     removeItem,
     getSubtotal,
+    getBulkDiscount,
+    getDiscountedSubtotal,
     getShipping,
     getTotal,
     getItemCount,
@@ -27,6 +29,8 @@ export function CartSidebar() {
 
   const cartProducts = getCartProducts()
   const subtotal = getSubtotal()
+  const bulkDiscount = getBulkDiscount()
+  const discountedSubtotal = getDiscountedSubtotal()
   const shipping = getShipping()
   const total = getTotal()
   const itemCount = getItemCount()
@@ -220,9 +224,17 @@ export function CartSidebar() {
                 {/* Totals */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-charcoal-600">Subtotal</span>
-                    <span className="text-charcoal-900">{formatPrice(subtotal)}</span>
+                    <span className="text-charcoal-600">Subtotal ({itemCount} items)</span>
+                    <span className={bulkDiscount.rate > 0 ? 'text-charcoal-400 line-through' : 'text-charcoal-900'}>
+                      {formatPrice(subtotal)}
+                    </span>
                   </div>
+                  {bulkDiscount.rate > 0 && (
+                    <div className="flex items-center justify-between text-sm bg-pickle-50 -mx-6 px-6 py-2">
+                      <span className="text-pickle-700 font-medium">Bulk Discount ({bulkDiscount.label})</span>
+                      <span className="text-pickle-600 font-semibold">-{formatPrice(bulkDiscount.savings)}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-charcoal-600">Shipping</span>
                     <span className={shipping === 0 ? 'text-pickle-600 font-semibold' : 'text-charcoal-900'}>
@@ -235,12 +247,17 @@ export function CartSidebar() {
                       {formatPrice(total)}
                     </span>
                   </div>
+                  {bulkDiscount.rate > 0 && (
+                    <p className="text-xs text-center text-pickle-600 font-medium">
+                      You're saving {formatPrice(bulkDiscount.savings)} with bulk pricing!
+                    </p>
+                  )}
                 </div>
 
                 {/* Free Shipping Progress */}
                 {shipping > 0 && (
                   <p className="text-sm text-charcoal-500 mb-4 text-center">
-                    Add {formatPrice(3500 - subtotal)} more for free shipping!
+                    Add {formatPrice(3500 - discountedSubtotal)} more for free shipping!
                   </p>
                 )}
 

@@ -5,7 +5,9 @@ import { Instagram, Mail, Crown } from 'lucide-react'
 
 const footerLinks = {
   shop: [
-    { href: '/shop', label: 'Customize Crown' },
+    { href: '/shop', label: 'Pickleball Crowns' },
+    { href: '/shop#medals', label: 'Tournament Medals' },
+    { href: '/bulk-orders', label: 'Tournament & League Orders' },
     { href: '/shipping', label: 'Shipping Info' },
   ],
   company: [
@@ -29,8 +31,8 @@ export function Footer() {
               </span>
             </div>
             <p className="text-cream-400 mb-6 max-w-sm">
-              Custom 3D-printed pickleball crowns - the ultimate wearable trophy for champions,
-              tournaments, and pickleball lovers everywhere.
+              Custom 3D-printed pickleball crowns and laser-engraved medals - the ultimate
+              wearable trophies for champions, tournaments, and pickleball lovers everywhere.
             </p>
             <div className="flex items-center gap-4">
               <a

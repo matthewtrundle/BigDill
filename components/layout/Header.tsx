@@ -11,7 +11,7 @@ import { useCart } from '@/lib/cart-context'
 
 const navLinks = [
   { href: '/shop', label: 'Shop' },
-  { href: '/bulk-orders', label: 'Bulk Orders' },
+  { href: '/bulk-orders', label: 'Tournament & League Orders' },
   { href: '/about', label: 'About' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
@@ -75,7 +75,7 @@ export function Header() {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <button
               onClick={toggleCart}
               className="relative p-2 text-charcoal-700 hover:text-charcoal-900 transition-colors"
@@ -89,7 +89,10 @@ export function Header() {
               )}
             </button>
             <Button variant="primary" size="default" asChild>
-              <Link href="/shop">Shop Crowns</Link>
+              <Link href="/shop">
+                <Crown className="w-4 h-4 mr-1.5" />
+                Shop Now
+              </Link>
             </Button>
           </div>
 
@@ -149,7 +152,10 @@ export function Header() {
               ))}
               <div className="pt-4">
                 <Button variant="primary" size="lg" className="w-full" asChild>
-                  <Link href="/shop">Shop Crowns</Link>
+                  <Link href="/shop">
+                    <Crown className="w-5 h-5 mr-2" />
+                    Shop Now
+                  </Link>
                 </Button>
               </div>
             </div>

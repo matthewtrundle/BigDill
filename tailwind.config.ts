@@ -93,8 +93,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['Playfair Display', 'Georgia', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-bebas)', 'Bebas Neue', 'Impact', 'sans-serif'],
+        heading: ['var(--font-poppins)', 'Poppins', 'system-ui', 'sans-serif'],
+        body: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'display-xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],

@@ -53,14 +53,24 @@ export interface CartItemOptions {
 export const products: Product[] = [
   {
     sku: 'CROWN-1',
-    name: 'Customizable Pickleball Crown',
+    name: 'Pickleball Crown',
     description: 'Crown the pickleball champion in style! This customizable 3D-printed crown features pickleball-inspired details and can be personalized with your own text. Perfect for tournaments, leagues, or as a fun gift.',
-    image: '/images/products/crown-placeholder.jpg',
+    image: '/images/il_1588xN.6727699661_5zg6.webp',
     price: 1999, // $19.99
     weight: 8, // 8 oz
     allowsCustomText: true,
     maxTextLength: 30,
     isBestSeller: true,
+  },
+  {
+    sku: 'MEDAL-1',
+    name: 'Pickleball Medal',
+    description: 'Custom laser-engraved wooden pickleball medals. Perfect for tournaments, leagues, and special events. Available in gold, silver & bronze finishes. Personalize with your logo & text.',
+    image: '/images/medal1.jpg',
+    price: 999, // $9.99
+    weight: 3, // 3 oz
+    allowsCustomText: true,
+    maxTextLength: 25,
   },
 ]
 

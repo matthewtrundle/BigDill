@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Inter, Bebas_Neue, Poppins } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/lib/cart-context'
 import { Header } from '@/components/layout/Header'
@@ -11,9 +11,18 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const playfair = Playfair_Display({
+// Bold, sporty display font for headlines
+const bebasNeue = Bebas_Neue({
+  weight: '400',
   subsets: ['latin'],
-  variable: '--font-playfair',
+  variable: '--font-bebas',
+})
+
+// Friendly, modern font for subheadings
+const poppins = Poppins({
+  weight: ['400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-poppins',
 })
 
 export const metadata: Metadata = {
@@ -60,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bebasNeue.variable} ${poppins.variable}`}>
       <body className="font-body antialiased">
         <CartProvider>
           {/* Grain texture overlay */}

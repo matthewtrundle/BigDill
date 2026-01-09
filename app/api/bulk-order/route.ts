@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { sendBulkOrderNotificationEmail, sendBulkOrderConfirmationEmail } from '@/lib/email'
 
 export async function POST(request: Request) {
   try {
@@ -7,6 +9,7 @@ export async function POST(request: Request) {
     const {
       name,
       email,
+      phone,
       organization,
       quantity,
       eventDate,
@@ -32,42 +35,75 @@ export async function POST(request: Request) {
       )
     }
 
-    // In a production environment, you would:
-    // 1. Save to database
-    // 2. Send notification email to admin
-    // 3. Send confirmation email to customer
-    // 4. Integrate with CRM
+    // Build message with all details
+    const fullMessage = [
+      eventDate ? `Event Date: ${eventDate}` : null,
+      eventType ? `Event Type: ${eventType}` : null,
+      customization ? `Customization: ${customization}` : null,
+      message ? `\nAdditional Notes:\n${message}` : null,
+    ]
+      .filter(Boolean)
+      .join('\n')
 
-    // For now, log the request
-    console.log('Bulk order request received:', {
+    // Save to database as a wholesale inquiry with bulk order type
+    const inquiry = await prisma.wholesaleInquiry.create({
+      data: {
+        businessName: organization || `${name}'s Event`,
+        contactName: name,
+        email,
+        phone: phone || null,
+        businessType: `Bulk Order - ${eventType || 'Event'}`,
+        estimatedVolume: `${quantity} units`,
+        message: fullMessage || null,
+        status: 'PENDING',
+      },
+    })
+
+    // Send notification email to admin
+    try {
+      await sendBulkOrderNotificationEmail({
+        name,
+        email,
+        phone,
+        organization,
+        quantity,
+        eventDate,
+        eventType,
+        customization,
+        message,
+      })
+    } catch (emailError) {
+      console.error('Failed to send admin notification:', emailError)
+      // Don't fail the request if email fails
+    }
+
+    // Send confirmation email to customer
+    try {
+      await sendBulkOrderConfirmationEmail({
+        to: email,
+        name,
+        quantity,
+        eventDate,
+      })
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError)
+      // Don't fail the request if email fails
+    }
+
+    console.log('Bulk order request saved:', {
+      id: inquiry.id,
       name,
       email,
       organization,
       quantity,
-      eventDate,
       eventType,
-      customization,
-      message,
       timestamp: new Date().toISOString(),
     })
-
-    // TODO: Implement email notification
-    // await sendBulkOrderNotification({
-    //   to: process.env.ADMIN_EMAIL,
-    //   subject: `Bulk Order Request from ${name}`,
-    //   body: formatBulkOrderEmail(body)
-    // })
-
-    // TODO: Send confirmation to customer
-    // await sendConfirmationEmail({
-    //   to: email,
-    //   name,
-    //   quantity
-    // })
 
     return NextResponse.json({
       success: true,
       message: 'Bulk order request received successfully',
+      inquiryId: inquiry.id,
     })
   } catch (error) {
     console.error('Error processing bulk order request:', error)

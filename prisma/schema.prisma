@@ -125,6 +125,41 @@ model OrderItem {
 }
 
 // ===========================================
+// CUSTOMER FEEDBACK
+// ===========================================
+
+model CustomerFeedback {
+  id            String    @id @default(uuid())
+  orderId       String    @unique
+  orderNumber   String
+  email         String
+  customerName  String
+
+  // Feedback data
+  rating        Int?      // 1-5 stars
+  comment       String?   @db.Text
+
+  // Token for feedback link
+  feedbackToken String    @unique @default(uuid())
+
+  // Coupon reward
+  couponCode    String?   @unique
+  couponUsed    Boolean   @default(false)
+  couponUsedAt  DateTime?
+
+  // Timestamps
+  emailSentAt   DateTime?
+  submittedAt   DateTime?
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([feedbackToken])
+  @@index([orderId])
+  @@index([couponCode])
+}
+
+// ===========================================
 // WHOLESALE MODELS
 // ===========================================
 
